@@ -1,18 +1,22 @@
 var original;
 var modtext = '';
 
+//get options from user
 function get_select() {
   return $('option').filter(':selected').val();
 }
 
+//get the value of the text sample
 function get_largetext() {
   original =  $('#largetext').val();
 }
 
+//obtain key from user
 function get_input() {
   return $('#key input').val();
 }
 
+//attaching listeners
 function addListener() {
   $('select').on('change',function (e) {
     if (get_select() == 'Encrypt') {
@@ -38,10 +42,16 @@ function addListener() {
     $('.tbx').first().animate({ "height": "toggle", "opacity": "toggle" });
     setTimeout(removePrevBox, 300)
     } else {
+
       get_largetext();
       var cleaned = cleanString();
       // var guessedKey = decipher(original);
+      //
+      //
+      //decryption starts here
+      //getting the guessed key
       var guessedKey = decipher(cleaned);
+      //perform decryption using guessed key
       var tmp  = encrypt(cleaned,guessedKey,-1);
       $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="width:100%;font-size:0.8em;" rows="10" name="INPUT">${tmp}</textarea></div>`);
       // $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="font-size:0.8em;" rows="16" cols="80" name="INPUT">${tmp}</textarea></div>`);
@@ -54,7 +64,9 @@ function addListener() {
 
 function decipher(string) {
   //most frequently used letter in english
+  //get the guessed key length from text sample, using letter of coincidence attack
   var keylength = getKeyLength(string);
+  //generate key using litter of frequency attack
   return keyGenerator(string,keylength);
 }
 
@@ -69,12 +81,14 @@ function keyGenerator(string,keylength) {
     possibleE[i] = getMostFreq(arr[i]);
     //4 is E in alphabetical order, assuming A is 0;
     let l = (possibleE[i] + 26  - 4 )%26;
+  //get the distance from E with the most frequent letter, that will give us the key
     guessyourkey += String.fromCharCode(65 + l);
   }
   return guessyourkey;
 }
 
 function getMostFreq(string) {
+  //we know E is the most frequently used letter, we will find the letter with most occurrence
   //26 letters
   var arr = new Array(26).fill(0);
   for (var i = 0, len = string.length; i < len; i++) {
@@ -90,10 +104,12 @@ function findMax(arr) {
       maxIndex = i;
     }
   }
+  //return index, or, the Nth place of a letter
   return maxIndex;
 }
 
 function getKeyLength(string) {
+  //six percent is the letter of coincidence for english text
   const six = 0.066;
   var arr = new Array(50);
   var len = string.length;
@@ -111,6 +127,7 @@ function getKeyLength(string) {
   for (var i = 0, len = deviation.length; i < len; i++) {
     deviation[i] = Math.abs(arr[i]-six);
   }
+  //get the index of the closest value to 6.6 percent
   for (var i = 0, len = deviation.length; i < len; i++) {
     if (Math.abs(deviation[i]) < 0.01 ) {
       return i+1;
@@ -125,31 +142,31 @@ function getKeyLength(string) {
   // }
 }
 
-function gcd(a, b) {
-    if ( b == 0) {
-        return a;
-    }
-    return gcd(b, a % b);
-};
+// function gcd(a, b) {
+//     if ( b == 0) {
+//         return a;
+//     }
+//     return gcd(b, a % b);
+// };
 
-function get_two_min(array) {
-  var holder = [];
-  var min = 0;
-  for (var i = 0, len = array.length; i < len; i++) {
-    if (array[min] > array[i]){
-      min = i;
-    }
-  }
-  holder.push(min+1);
-  var min2 = min == 0 ? 1 : 0;
-  for (var i = 0, len = array.length; i < len; i++) {
-    if (array[min2] > array[i] && min != i ){
-      min2 = i;
-    }
-  }
-  holder.push(min2+1);
-  return holder;
-}
+// function get_two_min(array) {
+//   var holder = [];
+//   var min = 0;
+//   for (var i = 0, len = array.length; i < len; i++) {
+//     if (array[min] > array[i]){
+//       min = i;
+//     }
+//   }
+//   holder.push(min+1);
+//   var min2 = min == 0 ? 1 : 0;
+//   for (var i = 0, len = array.length; i < len; i++) {
+//     if (array[min2] > array[i] && min != i ){
+//       min2 = i;
+//     }
+//   }
+//   holder.push(min2+1);
+//   return holder;
+// }
 
 function removePrevBox() {
   $('.tbx').last().animate({ "height": "toggle", "opacity": "toggle" },700,function(){ $('.tbx').last().remove();});
