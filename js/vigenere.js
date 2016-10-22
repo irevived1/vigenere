@@ -10,7 +10,7 @@ function get_largetext() {
 }
 
 function get_input() {
-  return $('#key').val();
+  return $('#key input').val();
 }
 
 function addListener() {
@@ -32,22 +32,22 @@ function addListener() {
         return;
       }
       var tmp  = encrypt(cleanString(),get_input().toUpperCase(),1);
-      // $('#textbox').prepend(`<div class='tbx'><textarea disabled style="width:100%;font-size:0.8em;" rows="8" name="INPUT">${tmp}</textarea></div>`);
-      $('#textbox').prepend(`<div class='tbx'><textarea disabled style="font-size:0.8em;" rows="16" cols="80" name="INPUT">${tmp}</textarea></div>`);
+      $('#textbox').prepend(`<div class='tbx'><textarea disabled style="width:100%;font-size:0.8em;" rows="10" name="INPUT">${tmp}</textarea></div>`);
+      // $('#textbox').prepend(`<div class='tbx'><textarea disabled style="font-size:0.8em;" rows="16" cols="80" name="INPUT">${tmp}</textarea></div>`);
     $('.tbx').first().hide();
     $('.tbx').first().animate({ "height": "toggle", "opacity": "toggle" });
-    setTimeout(removePrevBox, 700)
+    setTimeout(removePrevBox, 300)
     } else {
       get_largetext();
       var cleaned = cleanString();
       // var guessedKey = decipher(original);
       var guessedKey = decipher(cleaned);
       var tmp  = encrypt(cleaned,guessedKey,-1);
-      // $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="width:100%;font-size:0.8em;" rows="8" name="INPUT">${tmp}</textarea></div>`);
-      $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="font-size:0.8em;" rows="16" cols="80" name="INPUT">${tmp}</textarea></div>`);
+      $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="width:100%;font-size:0.8em;" rows="10" name="INPUT">${tmp}</textarea></div>`);
+      // $('#textbox').prepend(`<div class='tbx'>I think your key is "${guessedKey}"<br /><textarea disabled style="font-size:0.8em;" rows="16" cols="80" name="INPUT">${tmp}</textarea></div>`);
     $('.tbx').first().hide();
     $('.tbx').first().animate({ "height": "toggle", "opacity": "toggle" });
-    setTimeout(removePrevBox, 700)
+    setTimeout(removePrevBox, 300)
     }
   });
 }
